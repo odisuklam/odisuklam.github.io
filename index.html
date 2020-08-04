@@ -3,138 +3,124 @@
     <head>
         <title>Odis Uklam</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+
+        <!-- Image link template to be reused. -->
+        <script id="link" type="text/html">
+<a-entity class="link"
+          geometry="primitive: plane; height: 1; width: 1"
+          material="shader: flat; src: ${thumb}"
+          event-set__mouseenter="scale: 1.2 1.2 1"
+          event-set__mouseleave="scale: 1 1 1"
+          sound="on: click; src: #click-sound">
+    <a-entity
+              text="value: ${title};
+                    align: center;
+                    color: black;
+                    width: 6"
+              position="0 0 0.1">
+            </a-entity>
+            </a-entity>
+        </script>
+
+        <script>
+            AFRAME.registerComponent('navigate-on-click', {
+                schema: {
+                    url: {default: ''}
+                },
+
+                init: function () {
+                    var data = this.data;
+                    var el = this.el;
+
+                    el.addEventListener('click', function () {
+                        window.location.href = data.url;
+                    });
+                }
+            });        
+        </script>
     </head>
     <body>
         <a-scene>
             <a-assets>
                 <img 
                      id="bagian-dalam" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/bagian-dalam.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-bagian-dalam.jpg?v=1596546114253">
                 <img 
                      id="kolam" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/kolam.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-kolam.jpg?v=1596546781769">
                 <img 
                      id="sisi-belakang" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/sisi-belakang.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-belakang.jpg?v=1596546772938">
                 <img 
                      id="sisi-depan-dalam" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/sisi-depan-dalam.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-depan-dalam.jpg?v=1596546788555">
                 <img 
                      id="sisi-depan-luar" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/sisi-depan-luar.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-depan-luar.jpg?v=1596546787790">
                 <img 
                      id="sisi-kanan-dalam" 
                      src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kanan-dalam.jpg?v=1596546397934">
                 <img 
                      id="sisi-kanan-luar" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/sisi-kanan-luar.jpg">
-                <img id="sisi-kiri-dalam" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/sisi-kiri-dalam.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kanan-luar.jpg?v=1596546791953">
+                <img 
+                     id="sisi-kiri-dalam" 
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kiri-dalam.jpg?v=1596546788555">
                 <img 
                      id="sisi-kiri-luar" 
-                     src="https://raw.githubusercontent.com/odisuklam/resources/master/panoramas/candi-badut/sisi-kiri-luar.jpg">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kiri-luar.jpg?v=1596546847481">
+
+                <audio 
+                       id="click-sound"
+                       src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fclick.ogg?v=1596548643038">
+                </audio>
             </a-assets>
 
             <!--Memuat Foto 360-->
-            <a-sky 
+            <a-sky
+                   id="#image-360"
                    src="#sisi-kanan-dalam">
             </a-sky>
 
             <!--Agar user tidak bergerak menggunakan WASD-->
             <a-entity 
-                      camera
+                      camera 
                       look-controls
-                      wasd-controls="enabled: false"
                       position="0 1.6 0">
-                <a-entity 
-                          cursor="fuse: true; 
-                                  fuseTimeout: 1500"
-                          position="0 0 -1"
-                          geometry="primitive: ring; 
-                                    radiusInner: 0.02; 
-                                    radiusOuter: 0.03"
-                          material="color: red;">
-                </a-entity>
+                <a-cursor
+                          id="cursor"
+                          animation__click="
+                                            property: scale; 
+                                            startEvents: click; 
+                                            from: 0.1 0.1 0.1; 
+                                            to: 1 1 1; dur: 150"
+                          animation__fusing="
+                                             property: fusing; 
+                                             startEvents: fusing; 
+                                             from: 1 1 1; 
+                                             to: 0.1 0.1 0.1; 
+                                             dur: 1500"
+                          event-set__mouseenter="
+                                                 _event: mouseenter; 
+                                                 color: springgreen"
+                          event-set__mouseleave="
+                                                 _event: mouseleave; 
+                                                 color: black"
+                          raycaster="objects: .link">
+                </a-cursor>
             </a-entity>
 
-            <!--Papan Arca-->
-            <!--Papan-->
             <a-entity 
-                      geometry="primitive: box;
-                                width: 2;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="color: red"
-                      position="-7 6.7 0"
-                      rotation="0 90 0">
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Arca Apa Tuh?;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>
-            </a-entity>
-
-            <!--Papan Sisi Kanan Luar-->
-            <!--Papan-->
-            <a-entity 
-                      geometry="primitive: box;
-                                width: 2.1;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="color: red"
-                      position="5 2.6 0.1"
-                      rotation="0 -80 0">
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Sisi Kanan Luar;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>   
-            </a-entity>
-
-            <!--Papan Sisi Depan Dalam-->
-            <!--Papan-->
-            <a-entity 
-                      geometry="primitive: box;
-                                width: 2.3;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="color: red"
-                      position="-1 2.6 -5.5"
-                      rotation="0 20 0">
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Sisi Depan Dalam;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>
-            </a-entity>
-
-            <!--Papan Sisi Belakang-->
-            <!--Papan-->
-            <a-entity 
-                      geometry="primitive: box;
-                                width: 1.8;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="color: red"
-                      position="-1.6 2.6 7"
-                      rotation="0 -190 0"> 
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Sisi Belakang;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>
+                      position="0 2 -2"
+                      template="src: #link" 
+                      data-thumb="#kolam" 
+                      data-title="kolam"
+                      navigate-on-click="url: pages/candi-badut/kolam.html">
             </a-entity>
         </a-scene>
     </body>
