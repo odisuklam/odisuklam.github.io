@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bagian Dalam</title>
+        <title>Situs Candi Badut</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
         <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
@@ -31,7 +31,7 @@
         <a-scene>
             <a-assets>
                 <img id="background"
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fwatugong-bagian-dalam.jpg?v=1596546771001">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcity.jpg?v=1596589290955">
 
                 <audio id="click-sound" 
                        src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fclick.ogg?v=1596548643038"></audio>
@@ -66,26 +66,46 @@
             <!--Background gambar 360-->
             <a-sky src="#background"></a-sky>
 
-
-
-            <!--Papan untuk kembali menuju halaman utama-->
-            <a-entity class="papan"
-                      geometry="primitive: box;
-                                height: 0.3;
-                                width: 2;
-                                depth: 0.1"
-                      material="color: #222;"
-                      position="0 3.6 -2"
-                      rotation="30 0 0"
-                      event-set__mouseenter="scale: 1.2 1.2 1"
-                      event-set__mouseleave="scale: 1 1 1"
-                      sound="on: click; src: #click-sound"
-                      navigate-on-click="url: ../../index.html">
-                <a-entity text="value: Kembali ke menu utama;
+            <!--Papan untuk deskripsi situs-->
+            <a-entity geometry="primitive: box;
+                                height: 2;
                                 width: 3;
+                                depth: 0.1"
+                      position="0 2.6 -2.5"
+                      material="color: #222">
+                
+                <!--Judul situs-->
+                <a-entity text="value: Candi Badut;
+                                width: 4;
                                 color: #FFF;
                                 align: center"
-                          position="0 0 0.1"></a-entity>
+                          position="0 0.8 0.1"></a-entity>
+                
+                <!--Deskripsi situs-->
+                <a-entity text="value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent fringilla aliquam ultrices. Donec sagittis, mi sit amet consequat fermentum, leo odio efficitur velit, ac suscipit leo libero a ipsum. Pellentesque eget ultrices diam, sit amet viverra lacus. Aliquam egestas rhoncus orci id viverra. Pellentesque sit amet ligula orci. Pellentesque at posuere dolor. Sed eget ultricies mi. Nulla quis tortor tincidunt, porta felis sit amet, commodo nunc. Nam maximus elit mauris, ac interdum lorem imperdiet ac. Nullam tellus odio, porta quis eros et, imperdiet feugiat nulla. Vivamus ut dolor mattis mi posuere vehicula et et enim. Vivamus turpis dolor, tristique eu magna at, facilisis euismod urna.;
+                                width: 2;
+                                color: #FFF;
+                                align: center"
+                          position="0 -0.1 0.1"></a-entity>
+                
+                <!--Papan untuk menuju situs-->
+                <a-entity class="papan"
+                          geometry="primitive: box;
+                                    height: 0.3;
+                                    width: 1;
+                                    depth: 0.1"
+                          material="color: #222;"
+                          position="0 -1.3 0"
+                          event-set__mouseenter="scale: 1.2 1.2 1"
+                          event-set__mouseleave="scale: 1 1 1"
+                          sound="on: click; src: #click-sound"
+                          navigate-on-click="url: sisi-kanan-dalam.html">
+                    <a-entity text="value: Jelajahi;
+                                    width: 3;
+                                    color: #FFF;
+                                    align: center"
+                              position="0 0 0.1"></a-entity>
+                </a-entity>
             </a-entity>
         </a-scene>
     </body>

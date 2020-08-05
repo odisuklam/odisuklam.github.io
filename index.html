@@ -3,30 +3,12 @@
     <head>
         <title>Odis Uklam</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
         <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
         <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
         <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
 
-        <!-- Image link template to be reused. -->
-        <script id="link" type="text/html">
-<a-entity class="link"
-          geometry="primitive: plane; height: 1; width: 1"
-          material="shader: flat; src: ${thumb}"
-          event-set__mouseenter="scale: 1.2 1.2 1"
-          event-set__mouseleave="scale: 1 1 1"
-          sound="on: click; src: #click-sound">
-    <a-entity
-              text="value: ${title};
-                    align: center;
-                    color: black;
-                    width: 6"
-              position="0 0 0.1">
-            </a-entity>
-            </a-entity>
-        </script>
-
+        <!--Fungsi untuk pindah halaman-->
         <script>
             AFRAME.registerComponent('navigate-on-click', {
                 schema: {
@@ -43,57 +25,46 @@
                 }
             });        
         </script>
+
+        <!--Template untuk papan navigasi situs-->
+        <!--Parameter ${url} untuk lokasi file html-->
+        <!--Parameter ${title} untuk judul situs-->
+        <script id="papan-navigasi" type="text/html">
+<a-entity class="papan"
+          geometry="primitive: box;
+                    height: 1;
+                    width: 1;
+                    depth: 0.1"
+          material="color: #222"
+          event-set__mouseenter="scale: 1.2 1.2 1"
+          event-set__mouseleave="scale: 1 1 1"
+          sound="on: click; src: #click-sound"
+          navigate-on-click="url: ${url}">
+    <a-entity text="value: ${title};
+                    width: 3;
+                    color: #FFF;
+                    align: center"
+              position="0 0 0.1"></a-entity>
+            </a-entity>
+        </script>
+
     </head>
     <body>
         <a-scene>
             <a-assets>
-                <img 
-                     id="bagian-dalam" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-bagian-dalam.jpg?v=1596546114253">
-                <img 
-                     id="kolam" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-kolam.jpg?v=1596546781769">
-                <img 
-                     id="sisi-belakang" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-belakang.jpg?v=1596546772938">
-                <img 
-                     id="sisi-depan-dalam" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-depan-dalam.jpg?v=1596546788555">
-                <img 
-                     id="sisi-depan-luar" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-depan-luar.jpg?v=1596546787790">
-                <img 
-                     id="sisi-kanan-dalam" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kanan-dalam.jpg?v=1596546397934">
-                <img 
-                     id="sisi-kanan-luar" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kanan-luar.jpg?v=1596546791953">
-                <img 
-                     id="sisi-kiri-dalam" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kiri-dalam.jpg?v=1596546788555">
-                <img 
-                     id="sisi-kiri-luar" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kiri-luar.jpg?v=1596546847481">
+                <img id="background"
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcity.jpg?v=1596589290955">
 
-                <audio 
-                       id="click-sound"
-                       src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fclick.ogg?v=1596548643038">
-                </audio>
+                <audio id="click-sound" 
+                       src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fclick.ogg?v=1596548643038"></audio>
             </a-assets>
 
-            <!--Memuat Foto 360-->
-            <a-sky
-                   id="#image-360"
-                   src="#sisi-kanan-dalam">
-            </a-sky>
-
-            <!--Agar user tidak bergerak menggunakan WASD-->
-            <a-entity 
-                      camera 
+            <!--Camera dan Cursor-->
+            <a-entity camera 
                       look-controls
+                      wasd-controls
                       position="0 1.6 0">
-                <a-cursor
-                          id="cursor"
+                <a-cursor id="cursor"
                           animation__click="
                                             property: scale; 
                                             startEvents: click; 
@@ -111,17 +82,40 @@
                           event-set__mouseleave="
                                                  _event: mouseleave; 
                                                  color: black"
-                          raycaster="objects: .link">
-                </a-cursor>
+                          raycaster="objects: .papan"></a-cursor>
             </a-entity>
 
-            <a-entity 
-                      position="0 2 -2"
-                      template="src: #link" 
-                      data-thumb="#kolam" 
-                      data-title="kolam"
-                      navigate-on-click="url: pages/candi-badut/kolam.html">
+            <!--Background gambar 360-->
+            <a-sky src=#background></a-sky>
+
+            <!--Judul aplikasi-->
+            <a-entity geometry="primitive: box;
+                                height: 1;
+                                width: 2.8;
+                                depth: 0.1"
+                      material="color: #222"
+                      position="0 1.6 -2">
+                <a-entity text="value: ODIS UKLAM;
+                                width: 10;
+                                color: #FFF;
+                                align: center"
+                          position="0 0 0.1"></a-entity>
             </a-entity>
+
+            <!--Papan menuju situs-situs-->
+            <a-entity 
+                      template="src: #papan-navigasi"
+                      data-title="Candi Badut"
+                      data-url="pages/candi-badut/deskripsi.html"
+                      position="2.5 1.6 -2"
+                      rotation="0 -45 0"></a-entity>
+
+            <a-entity 
+                      template="src: #papan-navigasi"
+                      data-url="pages/watugong/deskripsi.html"
+                      data-title="Watugong"
+                      position="3.2 1.6 -1"
+                      rotation="0 -70 0"></a-entity>
         </a-scene>
     </body>
 </html>

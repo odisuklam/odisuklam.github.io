@@ -3,123 +3,167 @@
     <head>
         <title>Sisi Kanan Dalam</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+
+        <!--Fungsi untuk pindah halaman-->
+        <script>
+            AFRAME.registerComponent('navigate-on-click', {
+                schema: {
+                    url: {default: ''}
+                },
+
+                init: function () {
+                    var data = this.data;
+                    var el = this.el;
+
+                    el.addEventListener('click', function () {
+                        window.location.href = data.url;
+                    });
+                }
+            });        
+        </script>
+
+        <!--Template untuk papan navigasi situs-->
+        <!--Parameter ${url} untuk lokasi file html-->
+        <!--Parameter ${title} untuk judul situs-->
+        <!--Parameter ${width} untuk mengatur panjang papan-->
+        <script id="papan-navigasi" type="text/html">
+<a-entity class="papan"
+          geometry="primitive: box;
+                    height: 0.5;
+                    width: ${width};
+                    depth: 0.1"
+          material="src: #wood-texture;
+                    roughness: 0.9;"
+          event-set__mouseenter="scale: 1.2 1.2 1"
+          event-set__mouseleave="scale: 1 1 1"
+          sound="on: click; src: #click-sound"
+          navigate-on-click="url: ${url}">
+    <a-entity text="value: ${title};
+                    width: 5;
+                    color: #000;
+                    align: center"
+              position="0 0 0.1"></a-entity>
+            </a-entity>
+        </script>
+
+        <!--Template untuk papan keterangan benda di situs-->
+        <!--Parameter ${title} untuk nama benda-->
+        <!--Parameter ${width} untuk mengatur panjang papan-->
+        <script id="papan-keterangan" type="text/html">
+<a-entity class="papan"
+          geometry="primitive: box;
+                    height: 0.5;
+                    width: ${width};
+                    depth: 0.1"
+          material="color: #222"
+          event-set__mouseenter="scale: 1.2 1.2 1"
+          event-set__mouseleave="scale: 1 1 1"
+          sound="on: click; src: #click-sound">
+    <a-entity text="value: ${title};
+                    width: 5;
+                    color: #FFF;
+                    align: center"
+              position="0 0 0.1"></a-entity>
+            </a-entity>
+        </script>
+        
     </head>
     <body>
         <a-scene>
             <a-assets>
-                <img id="sisi-kanan-dalam" src="../../resources/panoramas/candi-badut/sisi-kanan-dalam.jpg">
-                <img id="wood-texture" src="../../resources/textures/wood-texture.jpg">
+                <img id="background"
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kanan-dalam.jpg?v=1596546397934">
+
+                <img id="wood-texture"
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fwood-texture.jpg?v=1596585582912">
+
+                <audio id="click-sound" 
+                       src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fclick.ogg?v=1596548643038"></audio>
             </a-assets>
 
-            <!--Memuat Foto 360-->
-            <a-sky 
-                   src="#sisi-kanan-dalam">
-            </a-sky>
-            
-            <!--Agar user tidak bergerak menggunakan WASD-->
-            <a-entity 
-                      camera
+            <!--Camera dan Cursor-->
+            <a-entity camera 
                       look-controls
-                      wasd-controls="enabled: false"
+                      wasd-controls
                       position="0 1.6 0">
-                <a-entity 
-                          cursor="fuse: true; 
-                                  fuseTimeout: 1500"
-                          position="0 0 -1"
-                          geometry="primitive: ring; 
-                                    radiusInner: 0.02; 
-                                    radiusOuter: 0.03"
-                          material="color: red;">
-                </a-entity>
+                <a-cursor id="cursor"
+                          animation__click="
+                                            property: scale; 
+                                            startEvents: click; 
+                                            from: 0.1 0.1 0.1; 
+                                            to: 1 1 1; dur: 150"
+                          animation__fusing="
+                                             property: fusing; 
+                                             startEvents: fusing; 
+                                             from: 1 1 1; 
+                                             to: 0.1 0.1 0.1; 
+                                             dur: 1500"
+                          event-set__mouseenter="
+                                                 _event: mouseenter; 
+                                                 color: springgreen"
+                          event-set__mouseleave="
+                                                 _event: mouseleave; 
+                                                 color: black"
+                          raycaster="objects: .papan"></a-cursor>
             </a-entity>
 
-            <!--Papan Arca-->
-            <!--Papan-->
-            <a-entity 
+            <!--Background gambar 360-->
+            <a-sky src="#background"></a-sky>
+
+            <!--Papan untuk kembali menuju halaman utama-->
+            <a-entity class="papan"
                       geometry="primitive: box;
+                                height: 0.3;
                                 width: 2;
-                                height: 0.7;
                                 depth: 0.1"
-                      material="src: #wood-texture;
-                                roughness: 0.9;
-                                normal-map: #wood-texture"
-                      position="-7 6.7 0"
-                      rotation="0 90 0">
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Arca Apa Tuh?;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>
+                      material="color: #222;"
+                      position="0 3.6 -2"
+                      rotation="30 0 0"
+                      event-set__mouseenter="scale: 1.2 1.2 1"
+                      event-set__mouseleave="scale: 1 1 1"
+                      sound="on: click; src: #click-sound"
+                      navigate-on-click="url: ../../index.html">
+                <a-entity text="value: Kembali ke menu utama;
+                                width: 3;
+                                color: #FFF;
+                                align: center"
+                          position="0 0 0.1"></a-entity>
             </a-entity>
-
-            <!--Papan Sisi Kanan Luar-->
-            <!--Papan-->
-            <a-entity 
-                      geometry="primitive: box;
-                                width: 2.1;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="src: #wood-texture;
-                                roughness: 0.9;
-                                normal-map: #wood-texture"
-                      position="5 2.6 0.1"
-                      rotation="0 -80 0">
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Sisi Kanan Luar;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>   
-            </a-entity>
-
-            <!--Papan Sisi Depan Dalam-->
-            <!--Papan-->
-            <a-entity 
-                      geometry="primitive: box;
-                                width: 2.3;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="src: #wood-texture;
-                                roughness: 0.9;
-                                normal-map: #wood-texture"
-                      position="-1 2.6 -5.5"
-                      rotation="0 20 0">
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Sisi Depan Dalam;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>
-            </a-entity>
-
-            <!--Papan Sisi Belakang-->
-            <!--Papan-->
-            <a-entity 
-                      geometry="primitive: box;
-                                width: 1.8;
-                                height: 0.7;
-                                depth: 0.1"
-                      material="src: #wood-texture;
-                                roughness: 0.9;
-                                normal-map: #wood-texture"
-                      position="-1.6 2.6 7"
-                      rotation="0 -190 0"> 
-                <!--Tulisan-->
-                <a-entity
-                          text="value: Sisi Belakang;
-                                align: center;
-                                color: black;
-                                width: 6"
-                          position="0 0 0.1">
-                </a-entity>
-            </a-entity>
+            
+            <!--Papan menuju sisi depan dalam-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-depan-dalam.html"
+                      data-title="Sisi Depan Dalam"
+                      data-width="2"
+                      position="-1 2.6 -4"
+                      rotation="0 10 0"></a-entity>
+            
+            <!--Papan menuju sisi kanan luar-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-kanan-luar.html"
+                      data-title="Sisi Kanan Luar"
+                      data-width="2"
+                      position="4 2.6 0"
+                      rotation="0 -90 0"></a-entity>
+            
+            <!--Papan menuju sisi belakang-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-belakang.html"
+                      data-title="Sisi Belakang"
+                      data-width="2"
+                      position="-1.2 2.6 5"
+                      rotation="0 170 0"></a-entity>
+            
+            <!--Papan arca-->
+            <a-entity template="src: #papan-keterangan"
+                      data-title="Arca"
+                      data-width="0.8"
+                      position="-5 5.3 0"
+                      rotation="30 90 0"></a-entity>
         </a-scene>
     </body>
 </html>

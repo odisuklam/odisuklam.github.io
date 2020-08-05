@@ -3,30 +3,12 @@
     <head>
         <title>Kolam</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
         <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
         <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
         <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
 
-        <!-- Image link template to be reused. -->
-        <script id="link" type="text/html">
-<a-entity class="link"
-          geometry="primitive: plane; height: 1; width: 1"
-          material="shader: flat; src: ${thumb}"
-          event-set__mouseenter="scale: 1.2 1.2 1"
-          event-set__mouseleave="scale: 1 1 1"
-          sound="on: click; src: #click-sound">
-    <a-entity
-              text="value: ${title};
-                    align: center;
-                    color: black;
-                    width: 6"
-              position="0 0 0.1">
-            </a-entity>
-            </a-entity>
-        </script>
-
+        <!--Fungsi untuk pindah halaman-->
         <script>
             AFRAME.registerComponent('navigate-on-click', {
                 schema: {
@@ -43,30 +25,72 @@
                 }
             });        
         </script>
+
+        <!--Template untuk papan navigasi situs-->
+        <!--Parameter ${url} untuk lokasi file html-->
+        <!--Parameter ${title} untuk judul situs-->
+        <!--Parameter ${width} untuk mengatur panjang papan-->
+        <script id="papan-navigasi" type="text/html">
+<a-entity class="papan"
+          geometry="primitive: box;
+                    height: 0.5;
+                    width: ${width};
+                    depth: 0.1"
+          material="src: #wood-texture;
+                    roughness: 0.9;"
+          event-set__mouseenter="scale: 1.2 1.2 1"
+          event-set__mouseleave="scale: 1 1 1"
+          sound="on: click; src: #click-sound"
+          navigate-on-click="url: ${url}">
+    <a-entity text="value: ${title};
+                    width: 5;
+                    color: #000;
+                    align: center"
+              position="0 0 0.1"></a-entity>
+            </a-entity>
+        </script>
+
+        <!--Template untuk papan keterangan benda di situs-->
+        <!--Parameter ${title} untuk nama benda-->
+        <!--Parameter ${width} untuk mengatur panjang papan-->
+        <script id="papan-keterangan" type="text/html">
+<a-entity class="papan"
+          geometry="primitive: box;
+                    height: 0.5;
+                    width: ${width};
+                    depth: 0.1"
+          material="color: #222"
+          event-set__mouseenter="scale: 1.2 1.2 1"
+          event-set__mouseleave="scale: 1 1 1"
+          sound="on: click; src: #click-sound">
+    <a-entity text="value: ${title};
+                    width: 5;
+                    color: #FFF;
+                    align: center"
+              position="0 0 0.1"></a-entity>
+            </a-entity>
+        </script>
+        
     </head>
     <body>
         <a-scene>
             <a-assets>
-                <img 
-                     id="kolam" 
+                <img id="background"
                      src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-kolam.jpg?v=1596546781769">
-                <img 
-                     id="sisi-kanan-dalam" 
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kanan-dalam.jpg?v=1596546397934">
+
+                <img id="wood-texture"
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fwood-texture.jpg?v=1596585582912">
+
+                <audio id="click-sound" 
+                       src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fclick.ogg?v=1596548643038"></audio>
             </a-assets>
 
-            <!--Memuat Foto 360-->
-            <a-sky 
-                   src="#kolam">
-            </a-sky>
-
-            <!--Agar user tidak bergerak menggunakan WASD-->
-            <a-entity 
-                      camera 
+            <!--Camera dan Cursor-->
+            <a-entity camera 
                       look-controls
+                      wasd-controls
                       position="0 1.6 0">
-                <a-cursor
-                          id="cursor"
+                <a-cursor id="cursor"
                           animation__click="
                                             property: scale; 
                                             startEvents: click; 
@@ -84,17 +108,48 @@
                           event-set__mouseleave="
                                                  _event: mouseleave; 
                                                  color: black"
-                          raycaster="objects: .link">
-                </a-cursor>
+                          raycaster="objects: .papan"></a-cursor>
             </a-entity>
 
-             <a-entity 
-                      position="0 2 -2"
-                      template="src: #link" 
-                      data-thumb="#sisi-kanan-dalam" 
-                      data-title="sisi-kanan-dalam"
+            <!--Background gambar 360-->
+            <a-sky src="#background"></a-sky>
+
+            <!--Papan untuk kembali menuju halaman utama-->
+            <a-entity class="papan"
+                      geometry="primitive: box;
+                                height: 0.3;
+                                width: 2;
+                                depth: 0.1"
+                      material="color: #222;"
+                      position="0 3.6 -2"
+                      rotation="30 0 0"
+                      event-set__mouseenter="scale: 1.2 1.2 1"
+                      event-set__mouseleave="scale: 1 1 1"
+                      sound="on: click; src: #click-sound"
                       navigate-on-click="url: ../../index.html">
+                <a-entity text="value: Kembali ke menu utama;
+                                width: 3;
+                                color: #FFF;
+                                align: center"
+                          position="0 0 0.1"></a-entity>
             </a-entity>
+        
+            <!--Papan menuju sisi depan luar-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-depan-luar.html"
+                      data-title="Sisi Depan Luar"
+                      data-width="2"
+                      position="-1 2.6 4"
+                      rotation="0 175 0"></a-entity>
+            
+            <!--Papan menuju sisi kiri luar-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-kiri-luar.html"
+                      data-title="Sisi Kiri Luar"
+                      data-width="2"
+                      position="0 2.6 -5"
+                      rotation="0 0 0"></a-entity>
+
         </a-scene>
     </body>
 </html>

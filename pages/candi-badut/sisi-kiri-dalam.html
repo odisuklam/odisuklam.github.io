@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bagian Dalam</title>
+        <title>Sisi Kanan Luar</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
         <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
@@ -70,13 +70,13 @@
               position="0 0 0.1"></a-entity>
             </a-entity>
         </script>
-
+        
     </head>
     <body>
         <a-scene>
             <a-assets>
                 <img id="background"
-                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-bagian-dalam.jpg?v=1596546114253">
+                     src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fcandi-badut-sisi-kiri-dalam.jpg?v=1596546788555">
 
                 <img id="wood-texture"
                      src="https://cdn.glitch.com/89191af1-b909-46b0-9e28-43ac17c7c4b4%2Fwood-texture.jpg?v=1596585582912">
@@ -133,14 +133,31 @@
                                 align: center"
                           position="0 0 0.1"></a-entity>
             </a-entity>
+                  
+            <!--Papan menuju sisi kiri luar-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-kiri-luar.html"
+                      data-title="Sisi Kiri Luar"
+                      data-width="1.6"
+                      position="4 2.6 -0.3"
+                      rotation="0 -85 0"></a-entity>
+            
+            <!--Papan menuju sisi belakang-->
+            <a-entity template="src: #papan-navigasi"
+                      data-url="sisi-belakang.html"
+                      data-title="Sisi Belakang"
+                      data-width="1.5"
+                      position="-0.3 2.6 -5"
+                      rotation="0 5 0"></a-entity>
 
+            
             <!--Papan menuju sisi depan dalam-->
             <a-entity template="src: #papan-navigasi"
                       data-url="sisi-depan-dalam.html"
                       data-title="Sisi Depan Dalam"
                       data-width="2"
-                      position="-3.5 2.6 -0.1"
-                      rotation="0 90 0"></a-entity>
+                      position="0.2 2.6 4"
+                      rotation="0 180 0"></a-entity>
         </a-scene>
     </body>
 </html>
